@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from LoggingProxyHTTPHandler import LoggingProxyHTTPHandler
-import BaseHTTPServer
+import http.server as BaseHTTPServer
 import sys
 
 

@@ -1,8 +1,7 @@
-import BaseHTTPServer
+import http.server as BaseHTTPServer
 import gzip
 import requests
-import StringIO
-
+from io import StringIO
 
 def rewrite_headers(headers):
     # Don't accept stuff that original request didn't accept
@@ -83,24 +82,24 @@ class LoggingProxyHTTPHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         pass
 
     def log_request(self, *args):
-        print "*** REQUEST ***"
-        print self.command + ' ' + self.path
+        print("*** REQUEST ***")
+        print(self.command + ' ' + self.path)
         for (k, v) in rewrite_headers(self.headers).items():
-            print "{0} = {1}".format(k, v)
-        print
+            print("{0} = {1}".format(k, v))
+        print()
         if self.command in ['POST', 'PUT']:
-            print self.data
-        print "*** END REQUEST ***"
+            print(self.data)
+        print("*** END REQUEST ***")
 
     def log_response(self, response):
-        print "*** RESPONSE ***"
+        print("*** RESPONSE ***")
         if response.status_code in self.responses:
             shortmessage, longmessage = self.responses[response.status_code]
         else:
             shortmessage = longmessage = "Not a code known by requests module!"
-        print "{0} {1}".format(response.status_code, shortmessage)
+        print("{0} {1}".format(response.status_code, shortmessage))
         for (k, v) in rewrite_headers(response.headers).items():
-            print "{0} = {1}".format(k, v)
-        print
-        print response.content
-        print "*** END RESPONSE ***"
+            print("{0} = {1}".format(k, v))
+        print()
+        print(response.content)
+        print("*** END RESPONSE ***")
